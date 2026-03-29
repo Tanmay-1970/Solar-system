@@ -41,5 +41,6 @@ jobs:
         - name: Archive Test Result
           uses: actions/upload-artifact@v5
           with:
-            name: Mocha-Test-Result
+          # Make artifact name unique per job run
+            name: Mocha-Test-Result-${{ matrix.nodejs_version }}-${{ matrix.operating_system }}-${{ github.run_id }}
             path: test-results.xml
