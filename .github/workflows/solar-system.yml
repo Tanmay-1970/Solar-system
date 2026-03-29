@@ -17,7 +17,7 @@ jobs:
     name: Unit Testing
     strategy:
       matrix:
-        nodejs_version: [18, 20, 24]
+        nodejs_version: [20, 24]
         operating_system: [ubuntu-latest, macos-latest]
         exclude:
           - nodejs_version: 18
@@ -32,13 +32,23 @@ jobs:
         with:
           node-version: ${{ matrix.nodejs_version }}
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v5
+        with:
+          path: node_modules   #This is the folder where all your installed packages go after npm install. So we are saying Save this folder (node_modules) for reuse 
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }} #This decides when to reuse cache and when not to
+          #runner.os → different cache for Linux / macOS  || package-lock.json → list of dependencies
+          #If dependencies don’t change → cache is reused || If dependencies don’t change → cache is reused
+      
       - name: Install Dependencies
         run: npm install
 
       - name: Unit Testing
+        id: nodejs-unit-testing    #this name can be anything to store the outcome value of this npm test.
         run: npm test
 
       - name: Archive Test Result
+        if: always()       # if either above npm test fail or success this archive step will always run. 
         uses: actions/upload-artifact@v5
         with:
           # Make artifact name unique per job run
@@ -57,11 +67,17 @@ jobs:
         with:
           node-version: 24
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }} 
+    
       - name: Install Dependencies
         run: npm install
 
       - name: Check Code Coverage
-        continue-on-error: true
+        continue-on-error: true      #it will skip the error and let the remaining steps contineue without stoping the workflow.
         run: npm run coverage
 
       - name: Archive Test Result
