@@ -90,16 +90,16 @@ jobs:
 
 
   docker:
-  name: Containerization
-  needs: [unit-testing, code-coverage] #So this docker login job only run when these 2 will complete.
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v4
+    name: Containerization
+    needs: [unit-testing, code-coverage] #So this docker login job only run when these 2 will complete.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
 
-    - name: Dockerhub Login
-      uses: docker/login-action@v2.2.0
-      with:
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Dockerhub Login
+        uses: docker/login-action@v2.2.0
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
            
