@@ -108,7 +108,7 @@ jobs:
         with:
           context: .  #path where you have your docker file
           push: false #it false that means after the docker image build it will not push the code into the image
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-System:${{ github.sha }}
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
 
       
       - name: Docker Image Testing
