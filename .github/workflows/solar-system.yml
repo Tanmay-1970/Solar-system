@@ -109,7 +109,7 @@ jobs:
         uses: docker/login-action@v2.2.0
         with:
           registry: ghcr.io
-          username: ${{ github.repository.owner }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }} #you have to add permission also like above in job leve step (write permission that we add) otherwise it will only have reaad permission 
           
 
@@ -145,7 +145,7 @@ jobs:
           push: true #true means after the docker image build it will push the code into the image
           tags: |
               ${{ vars.DOCKERHUB_USERNAME }}/solar-system:${{ github.sha }}
-              ghcr.io/${{ github.repository.owner }}/solar-system:${{ github.sha }}
+              ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha }}
       
 
 
