@@ -93,7 +93,7 @@ jobs:
   docker:
     name: Containerization
     needs: [unit-testing, code-coverage] #So this docker login job only run when these 2 will complete.
-    permission:
+    permissions:
        packages: write
     runs-on: ubuntu-latest
     steps:
@@ -106,11 +106,11 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: GHCR Login   #(Git hub container registery)
-      uses: docker/login-action@v2.2.0
-      with:
+      - name: GHCR Login   #(Git hub container registery)
+        uses: docker/login-action@v2.2.0
+        with:
           registery: ghcr.io
-          username: $ {{ github.Repository.owner }}
+          username: ${{ github.repository.owner }}
           password: ${{ secrets.GITHUB_TOKEN }} #you have to add permission also like above in job leve step (write permission that we add) otherwise it will only have reaad permission 
           
 
