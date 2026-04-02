@@ -15,8 +15,8 @@ env:
 jobs:
 
     unit-testing:
-    name: Unit Testing
-    strategy:
+     name: Unit Testing
+     strategy:
       matrix:
         nodejs_version: [20, 24]
         operating_system: [ubuntu-latest]
