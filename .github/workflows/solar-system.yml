@@ -137,7 +137,12 @@ jobs:
            echo Testing Image URL using wget
            wget -q -O - 127.0.0.1:3000/live | grep live 
            #this to check of container running or not, it give status live, so build and testing of docker will be done till this step.
-     
+    
+      - name: Convert owner to lowercase
+        id: repo_owner
+        run: echo "owner=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+            
+
       - name: Docker Push and to container registery
         uses: docker/build-push-action@v7
         with:
