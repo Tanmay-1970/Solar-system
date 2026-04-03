@@ -70,7 +70,7 @@ jobs:
     name: Code Coverage
     container:
       image: node:18 
-      services:
+    services:
       mongo-db:
         image: siddharth67/mongo-db:non-prod
         #ports:  Here no port mapping required ass it is container to container communication and allports are open to each other
