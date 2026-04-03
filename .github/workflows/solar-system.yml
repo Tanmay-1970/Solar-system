@@ -7,13 +7,13 @@ on:
       - main
       - 'feature/*'
 
-env:
+env:                  
   MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
   MONGO_USERNAME: ${{ vars.MONGO_USERNAME }}
   MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
 
 jobs:
-  unit-testing:
+  unit-testing:                                           #so below database is we are using for testing purpose so that it does not affect or we can say use the production database for these testing jobs.
     name: Unit Testing
     services:
       mongo-db:
@@ -68,15 +68,28 @@ jobs:
 
   code-coverage:
     name: Code Coverage
+    container:
+       image: node:18 
+      services:
+      mongo-db:
+        image: siddharth67/mongo-db:non-prod
+        #ports:  Here no port mapping required ass it is container to container communication and allports are open to each other
+         # - 27017:27017
+        options: 
+          --name mongo  #so its a  label name as a mongo, this is like container name
+    env:
+        MONGO_URI: 'mongodb://mongo:27017/superData'
+        MONGO_USERNAME: non-prod-user
+        MONGO_PASSWORD: non-prod-password   
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
 
-      - name: Setup NodeJS Version - 18
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
+      # - name: Setup NodeJS Version - 18    #so these step is commented as we running this job already on container and container itself has node.js and NPM installed.
+      #   uses: actions/setup-node@v5
+      #   with:
+      #     node-version: 24
 
       - name: Cache NPM dependencies
         uses: actions/cache@v5
@@ -120,7 +133,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }} #you have to add permission also like above in job leve step (write permission that we add) otherwise it will only have reaad permission 
+          password: ${{ secrets.GITHUB_TOKEN }} #you have to add permission also like above in job level step (write permission that we add) otherwise it will only have reaad permission 
           
 
       - name: Docker Build for Testing
